@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "PowerShell(npm run *)",
+      "PowerShell(netstat *)",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing -TimeoutSec 10 | Select-Object StatusCode, @{N='Size';E={$_.Content.Length}})",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing; Write-Output \"Status: $\\($r.StatusCode\\) | Size: $\\($r.Content.Length\\) bytes\")",
+      "PowerShell(Get-ChildItem C:\\\\dev\\\\bots-site -Recurse -File | Where-Object { $_.FullName -notmatch 'node_modules|\\\\.next|\\\\.git' } | ForEach-Object { $_.FullName.Replace\\('C:\\\\dev\\\\bots-site\\\\', ''\\) } | Sort-Object)",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing; $html = $r.Content; $links = [regex]::Matches\\($html, '<link[^>]+>'\\); $links | ForEach-Object {$_.Value} | Where-Object {$_ -match 'stylesheet|css'})",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost:3000/_next/static/css/app/layout.css\" -UseBasicParsing; Write-Output \"CSS size: $\\($r.Content.Length\\) bytes\"; $r.Content.Substring\\(0, [Math]::Min\\(600, $r.Content.Length\\)\\))",
+      "PowerShell(Get-Process *)",
+      "PowerShell(Stop-Process *)",
+      "Read(//mnt/c/dev/**)",
+      "Read(//tmp/**)",
+      "PowerShell(Set-Location C:\\\\dev\\\\bots-site; $p = Start-Process -FilePath \"cmd.exe\" -ArgumentList \"/c npm run dev > C:\\\\Temp\\\\nextdev.log 2>&1\" -PassThru -WorkingDirectory \"C:\\\\dev\\\\bots-site\"; Write-Output \"Started PID $\\($p.Id\\)\"; Start-Sleep 25; Get-Content C:\\\\Temp\\\\nextdev.log)",
+      "PowerShell(Start-Sleep 3; $r = Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing -TimeoutSec 15; Write-Output \"Status: $\\($r.StatusCode\\)\"; $cssMatch = [regex]::Match\\($r.Content, 'href=\"\\(/_next/static/css/[^\"]+\\)\"'\\); $cssUrl = $cssMatch.Groups[1].Value; Write-Output \"CSS URL: $cssUrl\")",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing -TimeoutSec 15; Write-Output \"Status: $\\($r.StatusCode\\) | Size: $\\($r.Content.Length\\)\"; $cssMatch = [regex]::Match\\($r.Content, 'href=\"\\(/_next/static/css/[^\"]+\\)\"'\\); $cssUrl = $cssMatch.Groups[1].Value; Write-Output \"CSS URL: $cssUrl\")",
+      "PowerShell($r2 = Invoke-WebRequest -Uri \"http://localhost:3000/_next/static/css/app/layout.css?v=1778222917475\" -UseBasicParsing -TimeoutSec 10; Write-Output \"CSS status: $\\($r2.StatusCode\\) | Size: $\\($r2.Content.Length\\) bytes\"; $r2.Content.Substring\\(0, [Math]::Min\\(800, $r2.Content.Length\\)\\))",
+      "PowerShell($r2 = Invoke-WebRequest -Uri \"http://localhost:3000/_next/static/css/app/layout.css?v=1778222917475\" -UseBasicParsing; $css = $r2.Content; Write-Output \"=== bg-bg-deep ===\"; if \\($css -match '#0A0A14|0a0a14'\\) { Write-Output \"FOUND bg-deep color\" } else { Write-Output \"NOT found\" }; Write-Output \"=== antialiased ===\"; if \\($css -match 'antialiased'\\) { Write-Output \"FOUND\" } else { Write-Output \"NOT found\" }; Write-Output \"=== @tailwind base output ===\"; if \\($css -match 'box-sizing: border-box'\\) { Write-Output \"FOUND Tailwind base\" } else { Write-Output \"NOT found - Tailwind not processing\" })",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing -TimeoutSec 40; Write-Output \"Page: $\\($r.StatusCode\\) | $\\($r.Content.Length\\)b\"; $cssMatch = [regex]::Match\\($r.Content, 'href=\"\\(/_next/static/css/[^\"]+\\)\"'\\); $cssUrl = $cssMatch.Groups[1].Value; Write-Output \"CSS URL: $cssUrl\"; Start-Sleep 2; $css = Invoke-WebRequest -Uri \"http://localhost:3000$cssUrl\" -UseBasicParsing; Write-Output \"CSS: $\\($css.StatusCode\\) | $\\($css.Content.Length\\)b\"; if \\($css.Content -match '#0A0A14'\\) { Write-Output \"✓ Dark theme color present\" }; if \\($css.Content -match 'box-sizing: border-box'\\) { Write-Output \"✓ Tailwind base present\" }; if \\($css.Content -match 'antialiased'\\) { Write-Output \"✓ Tailwind utilities present\" })",
+      "Bash(Get-Content \"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--dev-bots-site\\\\55580fd5-b8f1-4f35-ab07-1f3b70a62f85\\\\tasks\\\\bn427gatf.output\" -Wait)",
+      "Bash(Select-String -Pattern \"Ready|Compiled|Error|error|warn|GET|POST\" --line-buffered)",
+      "PowerShell(New-Item *)",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3000/.well-known/appspecific/com.chrome.devtools.json\" -UseBasicParsing | Select-Object StatusCode)",
+      "Bash(Remove-Item *)",
+      "Bash(curl -s http://localhost:3001)",
+      "Bash(npx tsc *)",
+      "Bash(Get-ChildItem C:\\\\dev\\\\bots-site\\\\out -Recurse -Name)",
+      "Bash(Sort-Object)"
+    ]
+  }
+}
