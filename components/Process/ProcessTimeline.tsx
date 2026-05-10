@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { fadeUp, stagger } from '@/lib/motion'
+import { slideFromBottom, stagger } from '@/lib/motion'
 import { FileText, Search, GitBranch, Code2, Rocket } from 'lucide-react'
 
 const STEPS = [
@@ -168,16 +168,16 @@ export default function ProcessTimeline() {
           variants={stagger()}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-15%' }}
+          viewport={{ once: false, margin: '-50px', amount: 0.2 }}
         >
           <motion.p
-            variants={fadeUp}
+            variants={slideFromBottom}
             className="text-xs font-display tracking-[0.25em] text-text-muted uppercase mb-4"
           >
             КАК Я РАБОТАЮ
           </motion.p>
           <motion.h2
-            variants={fadeUp}
+            variants={slideFromBottom}
             className="font-display font-black leading-tight"
             style={{ fontSize: 'clamp(32px, 5vw, 64px)' }}
           >
@@ -187,23 +187,24 @@ export default function ProcessTimeline() {
           </motion.h2>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="flex items-start justify-between pb-24">
-            {STEPS.map((step, i) => (
-              <div key={step.id} className="flex items-center flex-1 min-w-0">
-                <StepCard step={step} index={i} activeIndex={activeIndex} />
-                {i < STEPS.length - 1 && (
-                  <Connector index={i} activeIndex={activeIndex} />
-                )}
-              </div>
-            ))}
-          </div>
-        </motion.div>
+        <div className="flex items-start justify-between pb-24">
+          {STEPS.map((step, i) => (
+            <motion.div
+              key={step.id}
+              className="flex items-center flex-1 min-w-0"
+              initial={{ opacity: 0, y: 80 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, margin: '-50px', amount: 0.2 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: i * 0.15 }}
+              style={{ willChange: 'transform, opacity' }}
+            >
+              <StepCard step={step} index={i} activeIndex={activeIndex} />
+              {i < STEPS.length - 1 && (
+                <Connector index={i} activeIndex={activeIndex} />
+              )}
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   )

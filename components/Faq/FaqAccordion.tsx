@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { fadeUp, stagger } from '@/lib/motion'
+import { slideFromBottom, slideFromRight, stagger } from '@/lib/motion'
 import { Plus, Minus } from 'lucide-react'
 
 const FAQS = [
@@ -37,12 +37,13 @@ function FaqItem({ item, index }: { item: (typeof FAQS)[0]; index: number }) {
 
   return (
     <motion.div
-      variants={fadeUp}
+      variants={slideFromRight}
       className="relative rounded-xl overflow-hidden"
       style={{
         background: 'rgba(255,255,255,0.04)',
         border: `1px solid ${open ? 'rgba(94,231,255,0.3)' : 'rgba(255,255,255,0.07)'}`,
         transition: 'border-color 0.3s ease',
+        willChange: 'transform, opacity',
       }}
     >
       {/* Left accent bar */}
@@ -111,16 +112,16 @@ export default function FaqAccordion() {
           variants={stagger()}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-10%' }}
+          viewport={{ once: false, margin: '-50px', amount: 0.2 }}
         >
           <motion.p
-            variants={fadeUp}
+            variants={slideFromBottom}
             className="text-xs font-display tracking-[0.25em] text-text-muted uppercase mb-4"
           >
             FAQ
           </motion.p>
           <motion.h2
-            variants={fadeUp}
+            variants={slideFromBottom}
             className="font-display font-black leading-tight"
             style={{ fontSize: 'clamp(32px, 5vw, 64px)' }}
           >
@@ -130,10 +131,10 @@ export default function FaqAccordion() {
 
         <motion.div
           className="space-y-3"
-          variants={stagger(0.07)}
+          variants={stagger(0.08)}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-5%' }}
+          viewport={{ once: false, margin: '-50px', amount: 0.2 }}
         >
           {FAQS.map((item, i) => (
             <FaqItem key={i} item={item} index={i} />

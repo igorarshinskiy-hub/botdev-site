@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { fadeUp, stagger } from '@/lib/motion'
+import { slideFromBottom, stagger } from '@/lib/motion'
 import { Terminal, MessageSquare, TrendingUp, Package } from 'lucide-react'
 
 const CASES = [
@@ -277,16 +277,16 @@ export default function CasesSection() {
           variants={stagger()}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-10%' }}
+          viewport={{ once: false, margin: '-50px', amount: 0.2 }}
         >
           <motion.p
-            variants={fadeUp}
+            variants={slideFromBottom}
             className="text-xs font-display tracking-[0.25em] text-text-muted uppercase mb-4"
           >
             ПОРТФОЛИО
           </motion.p>
           <motion.h2
-            variants={fadeUp}
+            variants={slideFromBottom}
             className="font-display font-black leading-tight"
             style={{ fontSize: 'clamp(32px, 5vw, 64px)' }}
           >
@@ -301,15 +301,16 @@ export default function CasesSection() {
             return (
               <motion.div
                 key={c.title}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-5%' }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: i * 0.05 }}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -300 : 300 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: false, margin: '-50px', amount: 0.2 }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 className="group grid lg:grid-cols-2 gap-6 rounded-2xl p-6 lg:p-8 overflow-hidden"
                 style={{
                   background: 'rgba(255,255,255,0.03)',
                   border: '1px solid rgba(255,255,255,0.07)',
                   backdropFilter: 'blur(12px)',
+                  willChange: 'transform, opacity',
                 }}
                 whileHover={{ scale: 1.005 }}
               >

@@ -36,8 +36,8 @@ const LINKS = [
 ]
 
 const SOCIAL = [
-  { icon: MessageCircle, href: 'https://t.me/@your_handle', label: 'Telegram' },
-  { icon: Mail, href: 'mailto:you@mail.com', label: 'Email' },
+  { icon: MessageCircle, href: 'https://t.me/IgorArshinskii', label: 'Telegram' },
+  { icon: Mail, href: 'mailto:igorarshinskiy@gmail.com', label: 'Email' },
   { icon: Github, href: 'https://github.com/', label: 'GitHub' },
 ]
 
@@ -62,7 +62,14 @@ export default function Footer() {
         </span>
       </div>
 
-      <div className="container mx-auto px-6 lg:px-12 py-14 relative z-10">
+      <motion.div
+        className="container mx-auto px-6 lg:px-12 py-14 relative z-10"
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, margin: '-50px', amount: 0.2 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        style={{ willChange: 'transform, opacity' }}
+      >
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
           {/* Logo + tagline */}
           <div className="flex items-center gap-3">
@@ -118,7 +125,7 @@ export default function Footer() {
             Разработка ботов и автоматизации под ключ
           </p>
         </div>
-      </div>
+      </motion.div>
     </footer>
   )
 }

@@ -1,8 +1,31 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import { Send, BarChart3, Bot, Share2, Workflow, Plug } from 'lucide-react'
-import { fadeUp, stagger } from '@/lib/motion'
+import { slideFromBottom, stagger } from '@/lib/motion'
+
+const EASE = [0.22, 1, 0.36, 1] as const
+
+const cardVariant = (x: number, y: number, rotate: number): Variants => ({
+  hidden: { opacity: 0, x, y, scale: 0.9, rotate },
+  visible: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    scale: 1,
+    rotate: 0,
+    transition: { duration: 0.7, ease: EASE },
+  },
+})
+
+const CARD_VARIANTS: Variants[] = [
+  cardVariant(-200, 0, -5),
+  cardVariant(0, 200, 0),
+  cardVariant(200, 0, 5),
+  cardVariant(-200, 0, -5),
+  cardVariant(0, 200, 0),
+  cardVariant(200, 0, 5),
+]
 
 const SERVICES = [
   {
@@ -58,21 +81,24 @@ const SERVICES = [
 function ServiceCard({
   service,
   index,
+  entryVariant,
 }: {
   service: (typeof SERVICES)[0]
   index: number
+  entryVariant: Variants
 }) {
   const Icon = service.icon
 
   return (
     <motion.div
-      variants={fadeUp}
+      variants={entryVariant}
       custom={index}
       className="group relative rounded-2xl p-6 lg:p-7 cursor-default overflow-hidden"
       style={{
         background: 'rgba(255,255,255,0.04)',
         border: '1px solid rgba(255,255,255,0.08)',
         backdropFilter: 'blur(12px)',
+        willChange: 'transform, opacity',
       }}
       whileHover={{ y: -8, scale: 1.01 }}
       transition={{ type: 'spring', stiffness: 350, damping: 25 }}
@@ -150,16 +176,16 @@ export default function ServicesGrid() {
           variants={stagger()}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-10%' }}
+          viewport={{ once: false, margin: '-50px', amount: 0.2 }}
         >
           <motion.p
-            variants={fadeUp}
+            variants={slideFromBottom}
             className="text-xs font-display tracking-[0.25em] text-text-muted uppercase mb-4"
           >
             НАПРАВЛЕНИЯ
           </motion.p>
           <motion.h2
-            variants={fadeUp}
+            variants={slideFromBottom}
             className="font-display font-black leading-tight"
             style={{ fontSize: 'clamp(32px, 5vw, 64px)' }}
           >
@@ -169,13 +195,13 @@ export default function ServicesGrid() {
 
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-          variants={stagger(0.08)}
+          variants={stagger(0.1)}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-5%' }}
+          viewport={{ once: false, margin: '-50px', amount: 0.2 }}
         >
           {SERVICES.map((service, i) => (
-            <ServiceCard key={service.title} service={service} index={i} />
+            <ServiceCard key={service.title} service={service} index={i} entryVariant={CARD_VARIANTS[i]} />
           ))}
         </motion.div>
       </div>

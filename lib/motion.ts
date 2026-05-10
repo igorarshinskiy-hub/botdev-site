@@ -35,6 +35,13 @@ export const stagger = (delay = 0.1): Variants => ({
   },
 })
 
+export const staggerContainer: Variants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.1 },
+  },
+}
+
 export const slideLeft: Variants = {
   hidden: { opacity: 0, x: -60 },
   visible: {
@@ -50,5 +57,41 @@ export const slideRight: Variants = {
     opacity: 1,
     x: 0,
     transition: { duration: 0.8, ease },
+  },
+}
+
+export const slideFromLeft: Variants = {
+  hidden: { opacity: 0, x: -200 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.7, ease },
+  },
+}
+
+export const slideFromRight: Variants = {
+  hidden: { opacity: 0, x: 200 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.7, ease },
+  },
+}
+
+export const slideFromBottom: Variants = {
+  hidden: { opacity: 0, y: 100 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease },
+  },
+}
+
+export const slideFromTop: Variants = {
+  hidden: { opacity: 0, y: -100 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease },
   },
 }

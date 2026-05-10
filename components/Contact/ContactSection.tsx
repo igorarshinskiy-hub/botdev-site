@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { fadeUp, stagger } from '@/lib/motion'
+import { slideFromBottom, stagger } from '@/lib/motion'
 import { Send, MessageCircle, Mail, User, Phone, FileText } from 'lucide-react'
 import GradientButton from '@/components/ui/GradientButton'
 
@@ -150,16 +150,16 @@ export default function ContactSection() {
           variants={stagger()}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-10%' }}
+          viewport={{ once: false, margin: '-50px', amount: 0.2 }}
         >
           <motion.p
-            variants={fadeUp}
+            variants={slideFromBottom}
             className="text-xs font-display tracking-[0.25em] text-text-muted uppercase mb-4"
           >
             КОНТАКТ
           </motion.p>
           <motion.h2
-            variants={fadeUp}
+            variants={slideFromBottom}
             className="font-display font-black leading-tight"
             style={{ fontSize: 'clamp(28px, 4.5vw, 56px)' }}
           >
@@ -171,16 +171,17 @@ export default function ContactSection() {
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           {/* Left: contacts + form */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 0, x: -200 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: false, margin: '-50px', amount: 0.2 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            style={{ willChange: 'transform' }}
             className="space-y-8"
           >
             {/* Contact links */}
             <div className="flex flex-col gap-3">
               <a
-                href="https://t.me/@your_handle"
+                href="https://t.me/IgorArshinskii"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="glass flex items-center gap-4 px-5 py-4 rounded-xl hover:border-accent-cyan/40 transition-colors group"
@@ -189,19 +190,19 @@ export default function ContactSection() {
                 <div>
                   <p className="text-xs text-text-muted">Telegram</p>
                   <p className="text-sm font-semibold text-text-primary group-hover:text-accent-cyan transition-colors">
-                    @your_handle
+                    @IgorArshinskii
                   </p>
                 </div>
               </a>
               <a
-                href="mailto:you@mail.com"
+                href="mailto:igorarshinskiy@gmail.com"
                 className="glass flex items-center gap-4 px-5 py-4 rounded-xl hover:border-accent-violet/40 transition-colors group"
               >
                 <Mail size={20} className="text-accent-violet shrink-0" />
                 <div>
                   <p className="text-xs text-text-muted">Email</p>
                   <p className="text-sm font-semibold text-text-primary group-hover:text-accent-violet transition-colors">
-                    you@mail.com
+                    igorarshinskiy@gmail.com
                   </p>
                 </div>
               </a>
@@ -298,10 +299,11 @@ export default function ContactSection() {
 
           {/* Right: typing bot */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
+            initial={{ opacity: 0, x: 200 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+            viewport={{ once: false, margin: '-50px', amount: 0.2 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            style={{ willChange: 'transform' }}
           >
             <TypingBot />
           </motion.div>
