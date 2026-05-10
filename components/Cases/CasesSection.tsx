@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { slideFromBottom, stagger } from '@/lib/motion'
 import { Terminal, MessageSquare, TrendingUp, Package } from 'lucide-react'
 
@@ -85,11 +85,11 @@ const CASES = [
     previewType: 'terminal' as const,
     terminalLines: [
       '$ ./wb_analytics --live',
-      '─── Сегодня ──────────────────────────',
-      '📦 Заказов: 84   Выдано: 71   Возврат: 3',
-      '⭐ Рейтинг ПВЗ: 4.93 (+0.02 за неделю)',
-      '💰 К выплате: 18 420 ₽',
-      '─── Уведомление ──────────────────────',
+      'Сегодня:',
+      'Заказов: 84 / Выдано: 71 / Возврат: 3',
+      'Рейтинг ПВЗ: 4.93 (+0.02 за неделю)',
+      'К выплате: 18 420 ₽',
+      '─────────────────────────',
       '🔔 Новый возврат #WB-88821 → ТГ',
     ],
   },
@@ -106,10 +106,10 @@ function TerminalPreview({ lines, color }: { lines: string[]; color: string }) {
 
     const interval = setInterval(() => {
       if (lineIndex.current < lines.length) {
-        const idx = lineIndex.current          // capture before increment
+        const idx = lineIndex.current
         lineIndex.current++
         setVisibleLines((prev) => [...prev, lines[idx]])
-      } else if (!resetTimer.current) {        // guard: only one pending reset
+      } else if (!resetTimer.current) {
         resetTimer.current = setTimeout(() => {
           lineIndex.current = 0
           setVisibleLines([])
@@ -130,7 +130,7 @@ function TerminalPreview({ lines, color }: { lines: string[]; color: string }) {
       style={{ background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.08)' }}
     >
       {/* Terminal header */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-white/05">
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5">
         <div className="flex gap-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
@@ -139,14 +139,15 @@ function TerminalPreview({ lines, color }: { lines: string[]; color: string }) {
         <span className="text-text-muted text-xs ml-2">bash</span>
       </div>
 
-      <div className="p-4 space-y-1.5 min-h-[200px]">
+      {/* overflow-x-auto lets long lines scroll inside the terminal, not overflow the page */}
+      <div className="p-4 space-y-1.5 min-h-[200px] overflow-x-auto">
         {visibleLines.filter(Boolean).map((line, i) => (
           <motion.div
             key={`${i}-${line}`}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
-            className="leading-relaxed"
+            className="leading-relaxed whitespace-nowrap"
             style={{
               color: line?.startsWith('[OK]')
                 ? '#C6FF4F'
@@ -162,12 +163,7 @@ function TerminalPreview({ lines, color }: { lines: string[]; color: string }) {
             {line}
           </motion.div>
         ))}
-        <span
-          className="cursor-blink text-text-muted"
-          aria-hidden="true"
-        >
-          ▋
-        </span>
+        <span className="cursor-blink text-text-muted" aria-hidden="true">▋</span>
       </div>
     </div>
   )
@@ -190,10 +186,10 @@ function ChatPreview({
 
     const interval = setInterval(() => {
       if (msgIndex.current < messages.length) {
-        const idx = msgIndex.current            // capture before increment
+        const idx = msgIndex.current
         msgIndex.current++
         setVisibleMessages((prev) => [...prev, messages[idx]])
-      } else if (!resetTimer.current) {         // guard: only one pending reset
+      } else if (!resetTimer.current) {
         resetTimer.current = setTimeout(() => {
           msgIndex.current = 0
           setVisibleMessages([])
@@ -214,22 +210,19 @@ function ChatPreview({
       style={{ background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.08)' }}
     >
       <div
-        className="flex items-center gap-3 px-4 py-3 border-b border-white/05"
+        className="flex items-center gap-3 px-4 py-3 border-b border-white/5"
         style={{ background: `${color}10` }}
       >
         <div
-          className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
+          className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
           style={{ background: color, color: '#0A0A14' }}
         >
           AI
         </div>
-        <div>
+        <div className="min-w-0">
           <p className="text-xs font-semibold text-text-primary">Бот-ассистент</p>
           <div className="flex items-center gap-1">
-            <div
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: '#C6FF4F' }}
-            />
+            <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#C6FF4F' }} />
             <span className="text-[10px] text-text-muted">онлайн</span>
           </div>
         </div>
@@ -245,7 +238,7 @@ function ChatPreview({
             className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className="max-w-[85%] px-3 py-2 rounded-xl text-xs leading-relaxed"
+              className="max-w-[85%] px-3 py-2 rounded-xl text-xs leading-relaxed break-words"
               style={{
                 background:
                   msg.from === 'user'
@@ -268,16 +261,16 @@ export default function CasesSection() {
   return (
     <section
       id="cases"
-      className="relative py-16 lg:py-20 overflow-x-clip"
+      className="relative w-full py-16 lg:py-20 overflow-x-clip"
       aria-label="Кейсы"
     >
-      <div className="container mx-auto px-6 lg:px-12">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <motion.div
           className="text-center mb-10 lg:mb-12"
           variants={stagger()}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, margin: '-50px', amount: 0.2 }}
+          viewport={{ once: false, margin: '-50px', amount: 0 }}
         >
           <motion.p
             variants={slideFromBottom}
@@ -295,55 +288,50 @@ export default function CasesSection() {
           </motion.h2>
         </motion.div>
 
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {CASES.map((c, i) => {
             const Icon = c.icon
             return (
               <motion.div
                 key={c.title}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -60 : 60 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, margin: '-50px', amount: 0.2 }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="group grid lg:grid-cols-2 gap-6 rounded-2xl p-6 lg:p-8 overflow-hidden"
+                // x removed — x-axis translations on composited layers bypass overflow-x: clip on Android
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, margin: '-50px', amount: 0 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="group w-full max-w-full grid lg:grid-cols-2 gap-6 rounded-2xl p-5 sm:p-6 lg:p-8 overflow-hidden"
                 style={{
                   background: 'rgba(255,255,255,0.03)',
                   border: '1px solid rgba(255,255,255,0.07)',
                   backdropFilter: 'blur(12px)',
-                  willChange: 'transform, opacity',
+                  // willChange removed — see above comment
                 }}
                 whileHover={{ scale: 1.005 }}
               >
                 {/* Left: info */}
-                <div className="flex flex-col gap-5 justify-center">
-                  <div className="flex items-center gap-3">
+                <div className="flex flex-col gap-4 justify-center min-w-0">
+                  <div className="flex items-center gap-3 min-w-0">
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center"
+                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                       style={{ background: `${c.color}18`, border: `1px solid ${c.color}30` }}
                     >
                       <Icon size={18} style={{ color: c.color }} />
                     </div>
-                    <h3 className="font-display font-bold text-lg text-text-primary">
+                    <h3 className="font-display font-bold text-base sm:text-lg text-text-primary break-words min-w-0">
                       {c.title}
                     </h3>
                   </div>
 
-                  <p className="text-text-muted text-sm leading-relaxed">{c.desc}</p>
+                  <p className="text-text-muted text-sm leading-relaxed break-words">{c.desc}</p>
 
                   {/* Metrics */}
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2 sm:gap-3">
                     {c.metrics.map((m) => (
-                      <div
-                        key={m.label}
-                        className="glass px-4 py-2 rounded-full"
-                      >
-                        <span
-                          className="font-display font-bold text-sm"
-                          style={{ color: c.color }}
-                        >
+                      <div key={m.label} className="glass px-3 sm:px-4 py-2 rounded-full">
+                        <span className="font-display font-bold text-sm" style={{ color: c.color }}>
                           {m.value}
                         </span>
-                        <span className="text-text-muted text-xs ml-2">{m.label}</span>
+                        <span className="text-text-muted text-xs ml-1.5">{m.label}</span>
                       </div>
                     ))}
                   </div>
@@ -367,7 +355,7 @@ export default function CasesSection() {
                 </div>
 
                 {/* Right: preview */}
-                <div className="h-64 lg:h-72">
+                <div className="h-56 sm:h-64 lg:h-72">
                   {c.previewType === 'terminal' ? (
                     <TerminalPreview lines={c.terminalLines!} color={c.color} />
                   ) : (

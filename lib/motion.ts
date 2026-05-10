@@ -42,38 +42,39 @@ export const staggerContainer: Variants = {
   },
 }
 
+// slideLeft/Right: x replaced with y — x causes horizontal overflow on Android composited layers
 export const slideLeft: Variants = {
-  hidden: { opacity: 0, x: -60 },
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
-    x: 0,
+    y: 0,
     transition: { duration: 0.8, ease },
   },
 }
 
 export const slideRight: Variants = {
-  hidden: { opacity: 0, x: 60 },
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
-    x: 0,
+    y: 0,
     transition: { duration: 0.8, ease },
   },
 }
 
 export const slideFromLeft: Variants = {
-  hidden: { opacity: 0, x: -60 },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
-    x: 0,
+    y: 0,
     transition: { duration: 0.7, ease },
   },
 }
 
 export const slideFromRight: Variants = {
-  hidden: { opacity: 0, x: 60 },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
-    x: 0,
+    y: 0,
     transition: { duration: 0.7, ease },
   },
 }

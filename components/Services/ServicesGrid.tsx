@@ -6,25 +6,24 @@ import { slideFromBottom, stagger } from '@/lib/motion'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-const cardVariant = (x: number, y: number, rotate: number): Variants => ({
-  hidden: { opacity: 0, x, y, scale: 0.9, rotate },
+// No x-axis offsets — they create horizontal overflow on composited Android layers
+const cardVariant = (y: number): Variants => ({
+  hidden: { opacity: 0, y, scale: 0.95 },
   visible: {
     opacity: 1,
-    x: 0,
     y: 0,
     scale: 1,
-    rotate: 0,
-    transition: { duration: 0.7, ease: EASE },
+    transition: { duration: 0.6, ease: EASE },
   },
 })
 
 const CARD_VARIANTS: Variants[] = [
-  cardVariant(-60, 0, -3),
-  cardVariant(0, 60, 0),
-  cardVariant(60, 0, 3),
-  cardVariant(-60, 0, -3),
-  cardVariant(0, 60, 0),
-  cardVariant(60, 0, 3),
+  cardVariant(40),
+  cardVariant(60),
+  cardVariant(40),
+  cardVariant(60),
+  cardVariant(40),
+  cardVariant(60),
 ]
 
 const SERVICES = [
@@ -93,14 +92,14 @@ function ServiceCard({
     <motion.div
       variants={entryVariant}
       custom={index}
-      className="group relative rounded-2xl p-6 lg:p-7 cursor-default overflow-hidden"
+      className="group relative w-full rounded-2xl p-6 lg:p-7 cursor-default overflow-hidden"
       style={{
         background: 'rgba(255,255,255,0.04)',
         border: '1px solid rgba(255,255,255,0.08)',
         backdropFilter: 'blur(12px)',
-        willChange: 'transform, opacity',
+        // willChange removed — creates composited layer that escapes overflow-x: clip on Android
       }}
-      whileHover={{ y: -8, scale: 1.01 }}
+      whileHover={{ y: -6, scale: 1.01 }}
       transition={{ type: 'spring', stiffness: 350, damping: 25 }}
     >
       {/* Hover background glow */}
@@ -120,7 +119,7 @@ function ServiceCard({
         }}
       />
 
-      {/* Corner status dots — статичные */}
+      {/* Corner status dots */}
       <div className="absolute top-4 right-4 flex gap-1">
         {[...Array(3)].map((_, i) => (
           <div
@@ -141,20 +140,20 @@ function ServiceCard({
         <Icon size={22} style={{ color: service.color }} />
       </motion.div>
 
-      <h3 className="font-display font-bold text-lg text-text-primary mb-3">
+      <h3 className="font-display font-bold text-lg text-text-primary mb-3 break-words">
         {service.title}
       </h3>
-      <p className="text-text-muted text-sm leading-relaxed mb-4">{service.desc}</p>
+      <p className="text-text-muted text-sm leading-relaxed mb-4 break-words">{service.desc}</p>
 
       {/* Stack tag */}
       <p
-        className="text-xs font-mono opacity-50 group-hover:opacity-80 transition-opacity"
+        className="text-xs font-mono opacity-50 group-hover:opacity-80 transition-opacity break-words"
         style={{ color: service.color }}
       >
         {service.tag}
       </p>
 
-      {/* Bottom accent line — статичная */}
+      {/* Bottom accent line */}
       <div
         className="absolute bottom-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         style={{ background: `linear-gradient(90deg, transparent, ${service.color}, transparent)` }}
@@ -167,16 +166,16 @@ export default function ServicesGrid() {
   return (
     <section
       id="services"
-      className="relative py-16 lg:py-20 overflow-x-clip"
+      className="relative w-full py-16 lg:py-20 overflow-x-clip"
       aria-label="Услуги"
     >
-      <div className="container mx-auto px-6 lg:px-12">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <motion.div
           className="text-center mb-10 lg:mb-12"
           variants={stagger()}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, margin: '-50px', amount: 0.2 }}
+          viewport={{ once: false, margin: '-50px', amount: 0 }}
         >
           <motion.p
             variants={slideFromBottom}
@@ -186,19 +185,19 @@ export default function ServicesGrid() {
           </motion.p>
           <motion.h2
             variants={slideFromBottom}
-            className="font-display font-black leading-tight"
-            style={{ fontSize: 'clamp(32px, 5vw, 64px)' }}
+            className="font-display font-black leading-tight text-balance break-words"
+            style={{ fontSize: 'clamp(28px, 5vw, 64px)' }}
           >
             Что <span className="gradient-text">автоматизирую</span>
           </motion.h2>
         </motion.div>
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-          variants={stagger(0.1)}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"
+          variants={stagger(0.08)}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, margin: '-50px', amount: 0.2 }}
+          viewport={{ once: false, margin: '-50px', amount: 0 }}
         >
           {SERVICES.map((service, i) => (
             <ServiceCard key={service.title} service={service} index={i} entryVariant={CARD_VARIANTS[i]} />

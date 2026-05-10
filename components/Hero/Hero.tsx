@@ -25,7 +25,7 @@ export default function Hero() {
       aria-label="Главный экран"
     >
       <div className="container mx-auto px-6 lg:px-12 relative z-10 w-full">
-        <div className="grid lg:grid-cols-2 gap-10 xl:gap-16 items-center py-24 lg:min-h-screen">
+        <div className="grid lg:grid-cols-2 gap-10 xl:gap-16 items-center pt-24 pb-12 sm:pt-28 sm:pb-16 lg:py-24 lg:min-h-screen">
 
           {/* Left: text */}
           <motion.div
@@ -94,8 +94,8 @@ export default function Hero() {
 
           {/* Right: chat carousel */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="w-full"
           >
