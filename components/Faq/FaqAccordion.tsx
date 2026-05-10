@@ -103,7 +103,7 @@ export default function FaqAccordion() {
   return (
     <section
       id="faq"
-      className="relative py-16 lg:py-20 overflow-hidden"
+      className="relative py-16 lg:py-20 overflow-x-clip"
       aria-label="Часто задаваемые вопросы"
     >
       <div className="container mx-auto px-6 lg:px-12 max-w-3xl">

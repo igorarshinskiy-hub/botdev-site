@@ -25,7 +25,7 @@ export default function Hero() {
       aria-label="Главный экран"
     >
       <div className="container mx-auto px-6 lg:px-12 relative z-10 w-full">
-        <div className="grid lg:grid-cols-2 gap-10 xl:gap-16 items-center min-h-screen py-24">
+        <div className="grid lg:grid-cols-2 gap-10 xl:gap-16 items-center py-24 lg:min-h-screen">
 
           {/* Left: text */}
           <motion.div

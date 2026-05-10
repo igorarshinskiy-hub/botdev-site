@@ -61,7 +61,7 @@ export const slideRight: Variants = {
 }
 
 export const slideFromLeft: Variants = {
-  hidden: { opacity: 0, x: -200 },
+  hidden: { opacity: 0, x: -60 },
   visible: {
     opacity: 1,
     x: 0,
@@ -70,7 +70,7 @@ export const slideFromLeft: Variants = {
 }
 
 export const slideFromRight: Variants = {
-  hidden: { opacity: 0, x: 200 },
+  hidden: { opacity: 0, x: 60 },
   visible: {
     opacity: 1,
     x: 0,
@@ -79,7 +79,7 @@ export const slideFromRight: Variants = {
 }
 
 export const slideFromBottom: Variants = {
-  hidden: { opacity: 0, y: 100 },
+  hidden: { opacity: 0, y: 60 },
   visible: {
     opacity: 1,
     y: 0,
@@ -88,7 +88,7 @@ export const slideFromBottom: Variants = {
 }
 
 export const slideFromTop: Variants = {
-  hidden: { opacity: 0, y: -100 },
+  hidden: { opacity: 0, y: -60 },
   visible: {
     opacity: 1,
     y: 0,

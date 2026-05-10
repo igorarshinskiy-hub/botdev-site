@@ -268,7 +268,7 @@ export default function CasesSection() {
   return (
     <section
       id="cases"
-      className="relative py-16 lg:py-20 overflow-hidden"
+      className="relative py-16 lg:py-20 overflow-x-clip"
       aria-label="Кейсы"
     >
       <div className="container mx-auto px-6 lg:px-12">
@@ -287,8 +287,8 @@ export default function CasesSection() {
           </motion.p>
           <motion.h2
             variants={slideFromBottom}
-            className="font-display font-black leading-tight"
-            style={{ fontSize: 'clamp(32px, 5vw, 64px)' }}
+            className="font-display font-black leading-tight text-balance break-words"
+            style={{ fontSize: 'clamp(26px, 5vw, 64px)' }}
           >
             <span className="gradient-text">Реальные</span> проекты,{' '}
             реальные результаты
@@ -301,7 +301,7 @@ export default function CasesSection() {
             return (
               <motion.div
                 key={c.title}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -300 : 300 }}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -60 : 60 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, margin: '-50px', amount: 0.2 }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}

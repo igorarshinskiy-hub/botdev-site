@@ -141,7 +141,7 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative py-16 lg:py-20 overflow-hidden"
+      className="relative py-16 lg:py-20 overflow-x-clip"
       aria-label="Контакты"
     >
       <div className="container mx-auto px-6 lg:px-12">

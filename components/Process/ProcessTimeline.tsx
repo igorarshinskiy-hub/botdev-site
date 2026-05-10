@@ -159,7 +159,7 @@ export default function ProcessTimeline() {
     <section
       id="process"
       ref={sectionRef}
-      className="relative py-16 lg:py-20 overflow-hidden"
+      className="relative py-16 lg:py-20 overflow-x-clip"
       aria-label="Процесс работы"
     >
       <div className="container mx-auto px-6 lg:px-12">
@@ -178,8 +178,8 @@ export default function ProcessTimeline() {
           </motion.p>
           <motion.h2
             variants={slideFromBottom}
-            className="font-display font-black leading-tight"
-            style={{ fontSize: 'clamp(32px, 5vw, 64px)' }}
+            className="font-display font-black leading-tight text-balance break-words"
+            style={{ fontSize: 'clamp(26px, 5vw, 64px)' }}
           >
             Процесс, в котором{' '}
             <span className="gradient-text">нет магии</span>{' '}
@@ -187,7 +187,8 @@ export default function ProcessTimeline() {
           </motion.h2>
         </motion.div>
 
-        <div className="flex items-start justify-between pb-24">
+        {/* Desktop: horizontal timeline */}
+        <div className="hidden md:flex items-start justify-between pb-24">
           {STEPS.map((step, i) => (
             <motion.div
               key={step.id}
@@ -204,6 +205,87 @@ export default function ProcessTimeline() {
               )}
             </motion.div>
           ))}
+        </div>
+
+        {/* Mobile: vertical timeline */}
+        <div className="flex md:hidden flex-col">
+          {STEPS.map((step, i) => {
+            const Icon = step.icon
+            const isActive = i === activeIndex
+            const isDone = i < activeIndex
+            const isLast = i === STEPS.length - 1
+
+            return (
+              <motion.div
+                key={step.id}
+                className="flex gap-3"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, margin: '-50px', amount: 0.2 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: i * 0.1 }}
+              >
+                {/* Left: icon + vertical connector */}
+                <div className="flex flex-col items-center flex-shrink-0">
+                  <motion.div
+                    className="w-11 h-11 rounded-xl flex items-center justify-center"
+                    animate={{ opacity: isActive ? 1 : isDone ? 0.75 : 0.4 }}
+                    style={{
+                      background: isActive
+                        ? `radial-gradient(circle, ${step.color}30, transparent)`
+                        : 'rgba(255,255,255,0.04)',
+                      border: `1px solid ${isActive ? step.color : 'rgba(255,255,255,0.1)'}`,
+                      boxShadow: isActive ? `0 0 20px ${step.color}40` : 'none',
+                      transition: 'all 0.5s ease',
+                    }}
+                  >
+                    <Icon
+                      size={18}
+                      style={{ color: isActive ? step.color : '#9A9AB0' }}
+                      className="transition-colors duration-500"
+                    />
+                  </motion.div>
+                  {!isLast && (
+                    <div className="flex-1 w-px min-h-8 my-1.5 relative">
+                      <div className="absolute inset-0 bg-white/10" />
+                      <motion.div
+                        className="absolute inset-x-0 top-0 bottom-0"
+                        style={{
+                          background: 'linear-gradient(180deg, #5EE7FF, #8B5CF6)',
+                          transformOrigin: 'top',
+                        }}
+                        animate={{ scaleY: isDone ? 1 : 0 }}
+                        initial={{ scaleY: 0 }}
+                        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Right: title + expandable description */}
+                <div className={`flex-1 min-w-0 ${isLast ? '' : 'pb-4'}`}>
+                  <motion.p
+                    className="font-display font-bold text-sm mt-2.5"
+                    animate={{ color: isActive ? step.color : '#F5F5FA' }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    {step.title}
+                  </motion.p>
+                  <motion.div
+                    animate={{
+                      opacity: isActive ? 1 : 0,
+                      maxHeight: isActive ? 200 : 0,
+                    }}
+                    transition={{ duration: 0.4 }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div className="glass rounded-xl p-3 mt-2">
+                      <p className="text-text-muted text-xs leading-relaxed">{step.desc}</p>
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>

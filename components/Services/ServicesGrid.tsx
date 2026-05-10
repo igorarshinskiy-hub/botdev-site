@@ -19,12 +19,12 @@ const cardVariant = (x: number, y: number, rotate: number): Variants => ({
 })
 
 const CARD_VARIANTS: Variants[] = [
-  cardVariant(-200, 0, -5),
-  cardVariant(0, 200, 0),
-  cardVariant(200, 0, 5),
-  cardVariant(-200, 0, -5),
-  cardVariant(0, 200, 0),
-  cardVariant(200, 0, 5),
+  cardVariant(-60, 0, -3),
+  cardVariant(0, 60, 0),
+  cardVariant(60, 0, 3),
+  cardVariant(-60, 0, -3),
+  cardVariant(0, 60, 0),
+  cardVariant(60, 0, 3),
 ]
 
 const SERVICES = [
@@ -167,7 +167,7 @@ export default function ServicesGrid() {
   return (
     <section
       id="services"
-      className="relative py-16 lg:py-20 overflow-hidden"
+      className="relative py-16 lg:py-20 overflow-x-clip"
       aria-label="Услуги"
     >
       <div className="container mx-auto px-6 lg:px-12">

@@ -12,7 +12,7 @@ export default function Page() {
     <>
       <BackgroundGlow />
 
-      <main className="relative z-10">
+      <main className="relative z-10 overflow-x-clip">
         <header className="fixed top-0 left-0 right-0 z-50 px-6 lg:px-12 py-4">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
             <a

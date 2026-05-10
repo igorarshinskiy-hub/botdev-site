@@ -25,13 +25,16 @@
 
 html {
   color-scheme: dark;
+  overflow-x: clip;
+  max-width: 100vw;
 }
 
 body {
   background-color: var(--bg-deep);
   color: var(--text-primary);
   font-family: var(--font-manrope), system-ui, sans-serif;
-  overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100vw;
   -webkit-font-smoothing: antialiased;
 }
 
