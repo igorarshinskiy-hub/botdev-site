@@ -139,6 +139,12 @@ body {
   to { width: 100%; }
 }
 
+/* MaxBotShowcase: marquee infinite scroll */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

@@ -1,4 +1,5 @@
 import Hero from '@/components/Hero/Hero'
+import MaxBotShowcase from '@/components/MaxBot/MaxBotShowcase'
 import ProcessTimeline from '@/components/Process/ProcessTimeline'
 import ServicesGrid from '@/components/Services/ServicesGrid'
 import CasesSection from '@/components/Cases/CasesSection'
@@ -52,6 +53,7 @@ export default function Page() {
         </header>
 
         <Hero />
+        <MaxBotShowcase />
         <ProcessTimeline />
         <ServicesGrid />
         <CasesSection />
