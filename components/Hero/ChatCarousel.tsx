@@ -22,7 +22,21 @@ interface PlatformConfig {
   delay: number
 }
 
+// Order: MAX (top-left), Telegram (top-right), VK (bottom-left), WhatsApp (bottom-right)
 const PLATFORMS: PlatformConfig[] = [
+  {
+    id: 'max',
+    botName: 'MAX Бот · WB',
+    status: 'активен',
+    headerStyle: { background: 'linear-gradient(135deg, #7B2FBE, #3B4FD8)' },
+    clientBubble: { background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.9)' },
+    botBubble: { background: 'linear-gradient(135deg, rgba(123,47,190,0.7), rgba(59,79,216,0.7))', border: '1px solid rgba(123,47,190,0.4)', color: '#fff' },
+    dialogues: [
+      { client: 'Скидки на сегодня?', bot: 'Топ-3 скидки:\n• Худи Nike −45%\n• Кроссовки Adidas −38%\n• Куртка Columbia −52%' },
+      { client: 'Ссылку на худи', bot: 'Держи 👉 wb.ru/c/4821' },
+    ],
+    delay: 0,
+  },
   {
     id: 'telegram',
     botName: 'WB Помощник',
@@ -33,20 +47,6 @@ const PLATFORMS: PlatformConfig[] = [
     dialogues: [
       { client: 'Когда придёт заказ?', bot: 'Заказ #4821 в пути, доставка завтра до 18:00 📦' },
       { client: 'Спасибо!', bot: 'Всегда рады помочь 🤝' },
-    ],
-    delay: 0,
-  },
-  {
-    id: 'whatsapp',
-    botName: 'WA Business',
-    status: 'активен',
-    headerStyle: { background: '#075E54' },
-    clientBubble: { background: 'rgba(255,255,255,0.09)', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.9)' },
-    botBubble: { background: 'linear-gradient(135deg, #1a4a3a, #1e5c3f)', border: '1px solid rgba(220,248,198,0.2)', color: '#dcf8c6' },
-    showCheckmarks: true,
-    dialogues: [
-      { client: 'Hi, do you ship to Bali?', bot: 'Yes! Delivery to Bali takes 7-10 days 🌴' },
-      { client: 'Price for 5 items?', bot: '$129 with free shipping' },
     ],
     delay: 700,
   },
@@ -65,15 +65,16 @@ const PLATFORMS: PlatformConfig[] = [
     delay: 1400,
   },
   {
-    id: 'max',
-    botName: 'MAX Бот · WB',
+    id: 'whatsapp',
+    botName: 'WA Business',
     status: 'активен',
-    headerStyle: { background: 'linear-gradient(135deg, #7B2FBE, #3B4FD8)' },
-    clientBubble: { background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.9)' },
-    botBubble: { background: 'linear-gradient(135deg, rgba(123,47,190,0.7), rgba(59,79,216,0.7))', border: '1px solid rgba(123,47,190,0.4)', color: '#fff' },
+    headerStyle: { background: '#075E54' },
+    clientBubble: { background: 'rgba(255,255,255,0.09)', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.9)' },
+    botBubble: { background: 'linear-gradient(135deg, #1a4a3a, #1e5c3f)', border: '1px solid rgba(220,248,198,0.2)', color: '#dcf8c6' },
+    showCheckmarks: true,
     dialogues: [
-      { client: 'Скидки на сегодня?', bot: 'Топ-3 скидки:\n• Худи Nike −45%\n• Кроссовки Adidas −38%\n• Куртка Columbia −52%' },
-      { client: 'Ссылку на худи', bot: 'Держи 👉 wb.ru/c/4821' },
+      { client: 'Hi, do you ship to Bali?', bot: 'Yes! Delivery to Bali takes 7-10 days 🌴' },
+      { client: 'Price for 5 items?', bot: '$129 with free shipping' },
     ],
     delay: 2100,
   },
@@ -102,11 +103,11 @@ const ICONS: Record<string, React.ReactNode> = {
 
 function TypingDots() {
   return (
-    <div style={{ display: 'flex', gap: 3, padding: '8px 12px', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 3, padding: '6px 10px', alignItems: 'center' }}>
       {[0, 1, 2].map(i => (
         <motion.span
           key={i}
-          style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(255,255,255,0.65)', display: 'block', flexShrink: 0 }}
+          style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,255,255,0.65)', display: 'block', flexShrink: 0 }}
           animate={{ y: [0, -4, 0] }}
           transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.15, ease: 'easeInOut' }}
         />
@@ -185,6 +186,7 @@ function ChatWindow({ config, isVisible }: { config: PlatformConfig; isVisible: 
     <motion.div
       whileHover={{ scale: 1.02, boxShadow: '0 28px 72px rgba(0,0,0,0.58)' }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      className="h-[220px] sm:h-[260px] md:h-[300px] lg:h-[340px]"
       style={{
         background: 'rgba(255,255,255,0.04)',
         backdropFilter: 'blur(20px)',
@@ -194,32 +196,38 @@ function ChatWindow({ config, isVisible }: { config: PlatformConfig; isVisible: 
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        height: 256,
       }}
     >
       {/* Header */}
-      <div style={{ ...config.headerStyle, padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-        <div style={{
-          width: 30,
-          height: 30,
-          borderRadius: '50%',
-          background: 'rgba(255,255,255,0.2)',
-          border: '1px solid rgba(255,255,255,0.3)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-        }}>
+      <div style={{ ...config.headerStyle, padding: '8px 10px', display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+        <div
+          className="w-6 h-6 sm:w-[30px] sm:h-[30px]"
+          style={{
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.2)',
+            border: '1px solid rgba(255,255,255,0.3)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+          }}
+        >
           {config.avatarLetter
-            ? <span style={{ fontSize: 13, fontWeight: 700, color: 'white' }}>{config.avatarLetter}</span>
+            ? <span style={{ fontSize: 11, fontWeight: 700, color: 'white' }}>{config.avatarLetter}</span>
             : ICONS[config.id]
           }
         </div>
         <div style={{ minWidth: 0 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: 'white', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <div
+            className="text-[9px] sm:text-[11px]"
+            style={{ fontWeight: 600, color: 'white', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+          >
             {config.botName}
           </div>
-          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', gap: 3 }}>
+          <div
+            className="text-[8px] sm:text-[9px]"
+            style={{ color: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', gap: 3 }}
+          >
             <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#4ade80', display: 'inline-block', flexShrink: 0 }} />
             {config.status}
           </div>
@@ -230,11 +238,11 @@ function ChatWindow({ config, isVisible }: { config: PlatformConfig; isVisible: 
       <div style={{
         flex: 1,
         overflowY: 'hidden',
-        padding: '8px 10px',
+        padding: '6px 8px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        gap: 5,
+        gap: 4,
       }}>
         <AnimatePresence initial={false}>
           {messages.map(msg => (
@@ -246,16 +254,17 @@ function ChatWindow({ config, isVisible }: { config: PlatformConfig; isVisible: 
               transition={{ duration: 0.25, ease: 'easeOut' }}
               style={{ display: 'flex', justifyContent: msg.role === 'bot' ? 'flex-end' : 'flex-start', flexShrink: 0 }}
             >
-              <div style={{
-                ...(msg.role === 'bot' ? config.botBubble : config.clientBubble),
-                fontSize: 11,
-                lineHeight: 1.5,
-                padding: '6px 10px',
-                borderRadius: msg.role === 'bot' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
-                maxWidth: '84%',
-                wordBreak: 'break-word',
-                whiteSpace: 'pre-wrap',
-              }}>
+              <div
+                className="text-[10px] sm:text-[11px] px-2 py-1 sm:px-2.5 sm:py-1.5"
+                style={{
+                  ...(msg.role === 'bot' ? config.botBubble : config.clientBubble),
+                  lineHeight: 1.4,
+                  borderRadius: msg.role === 'bot' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
+                  maxWidth: '84%',
+                  wordBreak: 'break-word',
+                  whiteSpace: 'pre-wrap',
+                }}
+              >
                 {msg.text}
                 {msg.role === 'bot' && config.showCheckmarks && (
                   <span style={{ fontSize: 9, marginLeft: 5, color: '#93c5fd' }}>✓✓</span>
@@ -355,14 +364,10 @@ export default function ChatCarousel() {
         </span>
       </div>
 
-      {/* 2×2 grid */}
-      <div
-        className="grid grid-cols-2 gap-3.5"
-      >
-        {PLATFORMS.map((config, i) => (
-          <div key={config.id} className={i >= 2 ? 'hidden sm:block' : ''}>
-            <ChatWindow config={config} isVisible={isVisible} />
-          </div>
+      {/* 2×2 grid — all 4 windows visible on all screen sizes */}
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+        {PLATFORMS.map((config) => (
+          <ChatWindow key={config.id} config={config} isVisible={isVisible} />
         ))}
       </div>
     </div>

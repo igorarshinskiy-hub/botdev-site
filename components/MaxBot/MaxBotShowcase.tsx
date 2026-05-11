@@ -335,7 +335,7 @@ export default function MaxBotShowcase() {
             style={{ fontSize: 'clamp(24px, 4vw, 56px)' }}
           >
             <span className="gradient-text">Claude Bot</span> в MAX —{' '}
-            мой ИИ‑ассистент,{' '}
+            ИИ‑ассистент,{' '}
             которым пользуются прямо сейчас
           </motion.h2>
           <motion.p
