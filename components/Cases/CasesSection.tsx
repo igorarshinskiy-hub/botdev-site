@@ -89,11 +89,13 @@ const CASES = [
       'Заказов: 84 / Выдано: 71 / Возврат: 3',
       'Рейтинг ПВЗ: 4.93 (+0.02 за неделю)',
       'К выплате: 18 420 ₽',
-      '─────────────────────────',
+      '─────────────────────',
       '🔔 Новый возврат #WB-88821 → ТГ',
     ],
   },
 ]
+
+const MAX_VISIBLE = 5
 
 function TerminalPreview({ lines, color }: { lines: string[]; color: string }) {
   const [visibleLines, setVisibleLines] = useState<string[]>([])
@@ -108,7 +110,11 @@ function TerminalPreview({ lines, color }: { lines: string[]; color: string }) {
       if (lineIndex.current < lines.length) {
         const idx = lineIndex.current
         lineIndex.current++
-        setVisibleLines((prev) => [...prev, lines[idx]])
+        // keep only the last MAX_VISIBLE lines so the container never grows
+        setVisibleLines((prev) => {
+          const next = [...prev, lines[idx]]
+          return next.length > MAX_VISIBLE ? next.slice(-MAX_VISIBLE) : next
+        })
       } else if (!resetTimer.current) {
         resetTimer.current = setTimeout(() => {
           lineIndex.current = 0
@@ -126,11 +132,11 @@ function TerminalPreview({ lines, color }: { lines: string[]; color: string }) {
 
   return (
     <div
-      className="rounded-xl overflow-hidden font-mono text-xs h-full"
+      className="rounded-xl overflow-hidden font-mono text-xs h-full flex flex-col"
       style={{ background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.08)' }}
     >
-      {/* Terminal header */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5">
+      {/* Terminal title bar */}
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 flex-shrink-0">
         <div className="flex gap-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
@@ -139,16 +145,19 @@ function TerminalPreview({ lines, color }: { lines: string[]; color: string }) {
         <span className="text-text-muted text-xs ml-2">bash</span>
       </div>
 
-      {/* overflow-x-auto lets long lines scroll inside the terminal, not overflow the page */}
-      <div className="p-4 space-y-1.5 min-h-[200px] overflow-x-auto">
+      {/* Lines scroll upward: flex-col justify-end pushes content to the bottom,
+          overflow-hidden clips anything that grows above the top edge */}
+      <div className="flex-1 overflow-hidden p-4 flex flex-col justify-end gap-1.5">
         {visibleLines.filter(Boolean).map((line, i) => (
           <motion.div
             key={`${i}-${line}`}
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
-            className="leading-relaxed whitespace-nowrap"
+            className="leading-relaxed break-words max-w-full"
             style={{
+              whiteSpace: 'pre-wrap',
+              overflowWrap: 'anywhere',
               color: line?.startsWith('[OK]')
                 ? '#C6FF4F'
                 : line?.startsWith('[INFO]')
@@ -188,7 +197,11 @@ function ChatPreview({
       if (msgIndex.current < messages.length) {
         const idx = msgIndex.current
         msgIndex.current++
-        setVisibleMessages((prev) => [...prev, messages[idx]])
+        // keep only the last MAX_VISIBLE messages so the container never grows
+        setVisibleMessages((prev) => {
+          const next = [...prev, messages[idx]]
+          return next.length > MAX_VISIBLE ? next.slice(-MAX_VISIBLE) : next
+        })
       } else if (!resetTimer.current) {
         resetTimer.current = setTimeout(() => {
           msgIndex.current = 0
@@ -206,11 +219,12 @@ function ChatPreview({
 
   return (
     <div
-      className="rounded-xl overflow-hidden h-full"
+      className="rounded-xl overflow-hidden h-full flex flex-col"
       style={{ background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.08)' }}
     >
+      {/* Chat header */}
       <div
-        className="flex items-center gap-3 px-4 py-3 border-b border-white/5"
+        className="flex items-center gap-3 px-4 py-3 border-b border-white/5 flex-shrink-0"
         style={{ background: `${color}10` }}
       >
         <div
@@ -228,7 +242,8 @@ function ChatPreview({
         </div>
       </div>
 
-      <div className="p-4 space-y-3 min-h-[200px] overflow-hidden">
+      {/* Messages scroll upward: justify-end + overflow-hidden = console effect */}
+      <div className="flex-1 overflow-hidden p-4 flex flex-col justify-end gap-2">
         {visibleMessages.filter(Boolean).map((msg, i) => (
           <motion.div
             key={i}
@@ -240,6 +255,7 @@ function ChatPreview({
             <div
               className="max-w-[85%] px-3 py-2 rounded-xl text-xs leading-relaxed break-words"
               style={{
+                overflowWrap: 'anywhere',
                 background:
                   msg.from === 'user'
                     ? `${color}25`
@@ -289,12 +305,11 @@ export default function CasesSection() {
         </motion.div>
 
         <div className="space-y-6 sm:space-y-8">
-          {CASES.map((c, i) => {
+          {CASES.map((c) => {
             const Icon = c.icon
             return (
               <motion.div
                 key={c.title}
-                // x removed — x-axis translations on composited layers bypass overflow-x: clip on Android
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, margin: '-50px', amount: 0 }}
@@ -304,7 +319,6 @@ export default function CasesSection() {
                   background: 'rgba(255,255,255,0.03)',
                   border: '1px solid rgba(255,255,255,0.07)',
                   backdropFilter: 'blur(12px)',
-                  // willChange removed — see above comment
                 }}
                 whileHover={{ scale: 1.005 }}
               >
@@ -336,12 +350,12 @@ export default function CasesSection() {
                     ))}
                   </div>
 
-                  {/* Stack */}
-                  <div className="flex flex-wrap gap-2">
+                  {/* Stack tags — flex-wrap so tags never overflow the card edge */}
+                  <div className="flex flex-wrap gap-2 max-w-full">
                     {c.stack.map((s) => (
                       <span
                         key={s}
-                        className="px-2.5 py-1 rounded-lg text-xs font-mono"
+                        className="px-2.5 py-1 rounded-lg text-xs font-mono whitespace-nowrap"
                         style={{
                           background: `${c.color}10`,
                           border: `1px solid ${c.color}25`,
@@ -354,8 +368,8 @@ export default function CasesSection() {
                   </div>
                 </div>
 
-                {/* Right: preview */}
-                <div className="h-56 sm:h-64 lg:h-72">
+                {/* Right: preview — fixed height, never grows with content */}
+                <div className="h-[320px] sm:h-[360px] md:h-[400px]">
                   {c.previewType === 'terminal' ? (
                     <TerminalPreview lines={c.terminalLines!} color={c.color} />
                   ) : (
